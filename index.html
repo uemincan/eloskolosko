@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Buluşma Sayfası</title>
+  <style>
+    /* Genel stil */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    /* Üstteki resim */
+    #topImage {
+      width: 600px;
+      height: auto;
+    }
+    /* "HADİ AMAA!!" mesajı */
+    #hayirWarning {
+      display: none;
+      color: red;
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    /* Instruction mesajı */
+    #instructionMsg {
+      display: none;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    /* Butonlar */
+    #buttons {
+      margin-top: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 20px;
+      position: relative;
+    }
+    /* Date ve Time picker */
+    #datePicker, #timePicker {
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px;
+    }
+    /* Onaylama ekranı */
+    #confirmationScreen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #confirmationScreen img {
+      width: 600px;
+      height: auto;
+    }
+    /* Final ekranı */
+    #finalScreen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #finalScreen img {
+      width: 600px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Üstteki resim ve metin -->
+  <img id="topImage" src="lightning-mcqueen.jpg" alt="Lightning McQueen">
+  <h2 id="topText">Benimle bi randevuya çıkmaya ne dersin?</h2>
+
+  <!-- "HADİ AMAA!!" uyarı mesajı -->
+  <p id="hayirWarning">HADİ AMAA NAZ YAPMA!!</p>
+
+  <!-- Instruction mesajı -->
+  <p id="instructionMsg"></p>
+
+  <!-- Evet/Hayır butonları -->
+  <div id="buttons">
+    <button id="evetBtn">OLURRR</button>
+    <button id="hayirBtn">olmaz..</button>
+  </div>
+
+  <!-- Tarih ve saat seçici -->
+  <input type="date" id="datePicker">
+  <input type="time" id="timePicker">
+
+  <!-- Onaylama ekranı -->
+  <div id="confirmationScreen">
+    <img id="confirmationImage" src="123.jpg" alt="Seçilen Tarih ve Saat">
+    <p id="selectedDateTime"></p>
+    <button id="confirmBtn">Onaylıyorum.</button>
+  </div>
+
+  <!-- Final ekranı -->
+  <div id="finalScreen">
+    <img src="sonfoto.png" alt="Son Fotoğraf">
+    <p style="font-size: 24px; margin-top: 10px;">Randevunuz oluşturulmuştur.</p>
+    <button id="tamamBtn">Tamam</button>
+  </div>
+
+  <script>
+    const hayirBtn = document.getElementById('hayirBtn');
+    const evetBtn = document.getElementById('evetBtn');
+    const buttonsDiv = document.getElementById('buttons');
+    const datePicker = document.getElementById('datePicker');
+    const timePicker = document.getElementById('timePicker');
+    const instructionMsg = document.getElementById('instructionMsg');
+    const topImage = document.getElementById('topImage');
+    const topText = document.getElementById('topText');
+    const hayirWarning = document.getElementById('hayirWarning');
+    const confirmationScreen = document.getElementById('confirmationScreen');
+    const selectedDateTime = document.getElementById('selectedDateTime');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const finalScreen = document.getElementById('finalScreen');
+    const tamamBtn = document.getElementById('tamamBtn');
+
+    // "Hayır" butonuna tıklanınca buton rastgele bir yere gider ve "HADİ AMAA!!" yazısı çıkar
+    hayirBtn.addEventListener('click', function() {
+  if (datePicker.style.display === 'block') {
+    instructionMsg.textContent = "Tarih seçmek zorundasın!!!";
+  } else {
+    const maxX = window.innerWidth - hayirBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - hayirBtn.offsetHeight - 20;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+    hayirBtn.style.position = "absolute";
+    hayirBtn.style.left = `${randomX}px`;
+    hayirBtn.style.top = `${randomY}px`;
+
+    // HADİ AMAA!! yazısını göster
+    hayirWarning.style.display = "block";
+
+    // Resmi değiştir
+    topImage.src = "images2.jpg";
+
+    // Başlık yazısını gizle
+    topText.style.display = "none";
+  }
+});
+
+
+   // Buluşalıma (Evet) butonuna tıklanınca tarih seçme ekranı açılır ve resim değişir, butonlar kaybolur
+evetBtn.addEventListener('click', function() {
+  datePicker.style.display = 'block';
+  datePicker.value = '';
+
+  instructionMsg.style.display = 'block';
+  instructionMsg.textContent = "Anlaştık o zaman günü seçelim.";
+  
+  hayirWarning.style.display = 'none';
+  buttonsDiv.style.display = 'none';
+
+  topImage.src = "images.jpg";
+  topText.style.display = "none";
+});
+
+// Gün seçildiğinde onay ekranına geçilir
+datePicker.addEventListener('change', function() {
+  if (datePicker.value) {
+    // Tarih formatını "Gün Ay" şeklinde düzenle
+    const date = new Date(datePicker.value);
+    const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+    const formattedDate = `${date.getDate()} ${aylar[date.getMonth()]}`;
+
+    confirmationScreen.style.display = "flex";
+    selectedDateTime.innerHTML = `
+      <p style="font-size: 26px; font-weight: bold; color: black;">Seçtiğin Tarih: <b>${formattedDate}</b></p>
+      <p style="font-size: 32px; font-weight: bold; color: red; margin-top: 10px;">Onaylıyor musun??</p>
+    `;
+
+    // Ekrandaki her şeyi gizle, sadece tarih ve onay sorusu görünsün
+    datePicker.style.display = 'none';
+    instructionMsg.style.display = 'none';
+    topImage.style.display = 'none';
+  }
+});
+
+
+
+// Onaylıyorum butonuna basınca final ekrana geç
+confirmBtn.addEventListener('click', function() {
+  confirmationScreen.style.display = "none";
+  finalScreen.style.display = "flex";
+});
+
+// Tamam butonuna basınca sayfa yenilenir (en başa döner)
+tamamBtn.addEventListener('click', function() {
+  location.reload();
+});
+
+    // Onaylıyorum butonuna basınca final ekrana geç
+    confirmBtn.addEventListener('click', function() {
+      confirmationScreen.style.display = "none";
+      finalScreen.style.display = "flex";
+    });
+
+    // Tamam butonuna basınca sayfa yenilenir (en başa döner)
+    tamamBtn.addEventListener('click', function() {
+      location.reload();
+    });
+  </script>
+</body>
+</html>
