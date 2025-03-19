@@ -155,47 +155,54 @@
 });
 
 
-    // Buluşalıma (Evet) butonuna tıklanınca tarih seçme ekranı açılır ve resim değişir, butonlar kaybolur
-    evetBtn.addEventListener('click', function() {
-      datePicker.style.display = 'block';
-      datePicker.value = '';
-      timePicker.value = '';
-      timePicker.style.display = 'none';
+   // Buluşalıma (Evet) butonuna tıklanınca tarih seçme ekranı açılır ve resim değişir, butonlar kaybolur
+evetBtn.addEventListener('click', function() {
+  datePicker.style.display = 'block';
+  datePicker.value = '';
 
-      instructionMsg.style.display = 'block';
-      instructionMsg.textContent = "Anlaştık o zaman günü seçelim.";
-      
-      hayirWarning.style.display = 'none';
-      buttonsDiv.style.display = 'none';
+  instructionMsg.style.display = 'block';
+  instructionMsg.textContent = "Anlaştık o zaman günü seçelim.";
+  
+  hayirWarning.style.display = 'none';
+  buttonsDiv.style.display = 'none';
 
-      topImage.src = "images.jpg";
-      topText.style.display = "none";
-    });
+  topImage.src = "images.jpg";
+  topText.style.display = "none";
+});
 
-    // Gün seçildiğinde saat seçme alanı otomatik olarak görünür
-    datePicker.addEventListener('change', function() {
-      if (datePicker.value) {
-        timePicker.style.display = 'block';
-        instructionMsg.textContent = "Şimdi saati seçelim.";
-      }
-    });
+// Gün seçildiğinde onay ekranına geçilir
+datePicker.addEventListener('change', function() {
+  if (datePicker.value) {
+    // Tarih formatını "Gün Ay" şeklinde düzenle
+    const date = new Date(datePicker.value);
+    const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+    const formattedDate = `${date.getDate()} ${aylar[date.getMonth()]}`;
 
-    // Saat seçildiğinde tarih ve saat onay ekranına geçilir
-    timePicker.addEventListener('change', function() {
-      if (timePicker.value) {
-        confirmationScreen.style.display = "flex";
-        selectedDateTime.innerHTML = `
-          Seçtiğin Tarih: <b>${datePicker.value}</b><br>
-          Seçtiğin Saat: <b>${timePicker.value}</b>
-        `;
+    confirmationScreen.style.display = "flex";
+    selectedDateTime.innerHTML = `
+      <p style="font-size: 26px; font-weight: bold; color: black;">Seçtiğin Tarih: <b>${formattedDate}</b></p>
+      <p style="font-size: 32px; font-weight: bold; color: red; margin-top: 10px;">Onaylıyor musun??</p>
+    `;
 
-        // Ekrandaki her şeyi gizle, sadece 123.jpg ve seçilen saat/tarih görünsün
-        datePicker.style.display = 'none';
-        timePicker.style.display = 'none';
-        instructionMsg.style.display = 'none';
-        topImage.style.display = 'none';
-      }
-    });
+    // Ekrandaki her şeyi gizle, sadece tarih ve onay sorusu görünsün
+    datePicker.style.display = 'none';
+    instructionMsg.style.display = 'none';
+    topImage.style.display = 'none';
+  }
+});
+
+
+
+// Onaylıyorum butonuna basınca final ekrana geç
+confirmBtn.addEventListener('click', function() {
+  confirmationScreen.style.display = "none";
+  finalScreen.style.display = "flex";
+});
+
+// Tamam butonuna basınca sayfa yenilenir (en başa döner)
+tamamBtn.addEventListener('click', function() {
+  location.reload();
+});
 
     // Onaylıyorum butonuna basınca final ekrana geç
     confirmBtn.addEventListener('click', function() {
